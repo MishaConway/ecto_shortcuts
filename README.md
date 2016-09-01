@@ -7,7 +7,7 @@ Instead of doing
 changeset = MyApp.User.changeset(%MyApp.User{}, %{age: 0, email: "mary@example.com"})
 MyApp.Repo.insert(changeset)
 ```
- 
+
 Shortcut it and do
 ```elixir
 MyApp.User.insert age: 0, email: "mary@example.com"
@@ -17,7 +17,7 @@ What this is not is a comprehensive replacement. Ecto's DSL is rich and flexible
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and can be installed as:
 
   Add `ecto_shortcuts` to your list of dependencies in `mix.exs`:
 
