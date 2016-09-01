@@ -84,7 +84,7 @@ get_by
 
 get_by!
 ```elixir
-	MyApp.User.get_by name: "Sally", age: 30
+	MyApp.User.get_by! name: "Sally", age: 30
 ```
 
 where
