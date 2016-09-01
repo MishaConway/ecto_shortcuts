@@ -2,17 +2,6 @@
 
 Lightweight extension to simplify common use cases in Ecto.
 
-Instead of doing
-```elixir
-changeset = MyApp.User.changeset(%MyApp.User{}, %{age: 0, email: "mary@example.com"})
-MyApp.Repo.insert(changeset)
-```
-
-Shortcut it and do
-```elixir
-MyApp.User.insert age: 0, email: "mary@example.com"
-```
-
 What this is not is a comprehensive replacement. Ecto's DSL is rich and flexible and should be deferred to for anything complex.
 
 ## Installation
@@ -27,7 +16,7 @@ This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and ca
   end
   ```
 
- ## Configuration   
+## Configuration   
 
 Use it in your Ecto Models
 
