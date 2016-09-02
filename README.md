@@ -47,10 +47,16 @@ update_all
 	MyApp.User.update_all set: [status_id: 3]
 ```
 
-update_by!
+update_by
 ```elixir
 	# set status_id to 4 where mode is 3
 	MyApp.User.update_by [mode: 3], set: [status_id: 4]
+```
+
+update_by_returning
+```elixir
+	# set status_id to 4 where mode is 3
+	updated_users = MyApp.User.update_by_returning [mode: 3], set: [status_id: 4]
 ```
 
 delete_all

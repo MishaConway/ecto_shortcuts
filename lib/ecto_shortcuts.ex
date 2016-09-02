@@ -95,6 +95,27 @@ defmodule EctoShortcuts do
       end
 
 
+      @doc """
+      Updates all records matching filters and returns the updated records via a second query.
+      Useful for when MyApp.User.update_by [id: 3], [set: [status_id: 4]], returning: true
+      results in ** (ArgumentError) RETURNING is not supported in update_all by MySQL
+
+      ## Examples
+
+          iex> updated_users = MyApp.User.update_by_returning [mode: 3], set: [status_id: 4]
+
+      """
+      def update_by_returning(filters, updates, opts \\ []) do
+        {num_rows, result} = update_by filters, updates, opts
+        if num_rows > 0 do
+          where filters
+        else
+          []
+        end
+      end
+
+
+
       ######## DELETES ##########
 
 
