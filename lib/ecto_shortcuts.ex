@@ -23,6 +23,15 @@ defmodule EctoShortcuts do
         unquote repo
       end
 
+      defp pload( preloadable, opts ) do
+        preloads = opts[:preload] || opts[:preloads] || []
+        if Enum.count(preloads) > 0 do
+          preloadable |> repo.preload(preloads)
+        else
+          preloadable
+        end
+      end
+
       ######### INSERTS ##########
 
       defp new_changeset(attributes) do
@@ -103,12 +112,13 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> updated_users = MyApp.User.update_by_returning [mode: 3], set: [status_id: 4]
+          iex> [updated_user] = MyApp.User.update_by_returning [id: 1], [set: [status_id: 3]], preload: [:posts]
 
       """
       def update_by_returning(filters, updates, opts \\ []) do
         {num_rows, result} = update_by filters, updates, opts
         if num_rows > 0 do
-          where filters
+          where(filters) |> pload(opts)
         else
           []
         end
@@ -154,10 +164,12 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.get 3
+          iex> MyApp.User.get 3, preload: [:posts]
+          iex> MyApp.User.get 3, preload: [{:posts, :post_type}]
 
       """
       def get(id, opts \\ []) do
-        repo.get __MODULE__, id, opts
+        repo.get(__MODULE__, id, opts) |> pload( opts )
       end
 
       @doc """
@@ -166,10 +178,12 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.get! 3
+          iex> MyApp.User.get! 3, preload: [:posts]
+          iex> MyApp.User.get! 3, preload: [{:posts, :post_type}]
 
       """
       def get!(id, opts \\ []) do
-        repo.get! __MODULE__, id, opts
+        repo.get!(__MODULE__, id, opts) |> pload( opts )
       end
 
       @doc """
@@ -178,10 +192,12 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.get_by name: "Sally"
+          iex> MyApp.User.get_by [name: "Sally"],  preload: [:posts]
+          iex> MyApp.User.get_by [name: "Sally"], preload: [{:posts, :post_type}]
 
       """
       def get_by(filters, opts \\ []) do
-        repo.get_by __MODULE__, filters, opts
+        repo.get_by(__MODULE__, filters, opts) |> pload( opts )
       end
 
       @doc """
@@ -190,10 +206,12 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.get_by! name: "Sally"
+          iex> MyApp.User.get_by! [name: "Sally"],  preload: [:posts]
+          iex> MyApp.User.get_by! [name: "Sally"], preload: [{:posts, :post_type}]
 
       """
       def get_by!(clauses, opts \\ []) do
-        repo.get_by! __MODULE__, clauses, opts
+        repo.get_by!(__MODULE__, clauses, opts) |> pload( opts )
       end
 
       @doc """
@@ -202,10 +220,12 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.first
+          iex> MyApp.User.first preload: [:posts]
+          iex> MyApp.User.first preload: [{:posts, :post_type}]
 
       """
-      def first do
-        __MODULE__ |> Ecto.Query.first |> repo.one
+      def first( opts \\ [] ) do
+        __MODULE__ |> Ecto.Query.first |> repo.one |> pload( opts )
       end
 
 
@@ -215,8 +235,9 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.where status: 3
+          iex> MyApp.User.where [status: 3], limit: 10, order_by: [desc: :inserted_at]
+          iex> MyApp.User.where [status: 3],  limit: 10, order_by: [desc: :inserted_at], preload: [:posts]
 
-          iex> MyApp.User.where [status: 3], limit: 10, order_by: [desc: :created_at]
 
       """
       def where(attributes, options \\ []) do
@@ -238,6 +259,7 @@ defmodule EctoShortcuts do
         ecto_query
         |> Ecto.Query.where(^attributes)
         |> repo.all
+        |> pload(options)
       end
 
       # silly method needed due to macro hell
@@ -311,10 +333,11 @@ defmodule EctoShortcuts do
       ## Examples
 
           iex> MyApp.User.all
+          iex> MyApp.User.all preload: [:posts]
 
       """
-      def all do
-        __MODULE__ |> repo.all
+      def all(opts \\ []) do
+        __MODULE__ |> repo.all |> pload(opts)
       end
 
       @doc """
