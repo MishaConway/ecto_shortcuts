@@ -18,6 +18,8 @@ defmodule EctoShortcuts do
        """
     end
 
+    model = Keyword.get opts, :model
+
     quote do
       import Ecto
       import Ecto.Changeset
@@ -25,6 +27,10 @@ defmodule EctoShortcuts do
 
       def repo do
         unquote repo
+      end
+
+      def model do
+        unquote(model) || __MODULE__
       end
 
       defp pload( preloadable, opts ) do
@@ -39,7 +45,7 @@ defmodule EctoShortcuts do
       ######### INSERTS ##########
 
       defp new_changeset(attributes) do
-        __MODULE__.changeset struct(__MODULE__), attributes
+        model.changeset struct(model), attributes
       end
 
       @doc """
@@ -80,7 +86,7 @@ defmodule EctoShortcuts do
 
       """
       def update_all(updates, opts \\ []) do
-        repo.update_all(__MODULE__, updates, opts)
+        repo.update_all(model, updates, opts)
       end
 
       defp apply_filter(key, value, query) do
@@ -89,7 +95,7 @@ defmodule EctoShortcuts do
       end
 
       defp reduce_filters(filters) do
-        ecto_query = Ecto.Query.from x in __MODULE__
+        ecto_query = Ecto.Query.from x in model
         Enum.reduce(filters, ecto_query, fn(filter, ecto_query) ->
           ecto_query = apply_filter(elem(filter, 0), elem(filter, 1), ecto_query)
         end)
@@ -142,7 +148,7 @@ defmodule EctoShortcuts do
 
       """
       def delete_all do
-        repo.delete_all __MODULE__
+        repo.delete_all model
       end
 
       @doc """
@@ -173,7 +179,7 @@ defmodule EctoShortcuts do
 
       """
       def get(id, opts \\ []) do
-        repo.get(__MODULE__, id, opts) |> pload( opts )
+        repo.get(model, id, opts) |> pload( opts )
       end
 
       @doc """
@@ -187,7 +193,7 @@ defmodule EctoShortcuts do
 
       """
       def get!(id, opts \\ []) do
-        repo.get!(__MODULE__, id, opts) |> pload( opts )
+        repo.get!(model, id, opts) |> pload( opts )
       end
 
       @doc """
@@ -201,7 +207,7 @@ defmodule EctoShortcuts do
 
       """
       def get_by(filters, opts \\ []) do
-        repo.get_by(__MODULE__, filters, opts) |> pload( opts )
+        repo.get_by(model, filters, opts) |> pload( opts )
       end
 
       @doc """
@@ -215,7 +221,7 @@ defmodule EctoShortcuts do
 
       """
       def get_by!(clauses, opts \\ []) do
-        repo.get_by!(__MODULE__, clauses, opts) |> pload( opts )
+        repo.get_by!(model, clauses, opts) |> pload( opts )
       end
 
       @doc """
@@ -229,7 +235,7 @@ defmodule EctoShortcuts do
 
       """
       def first( opts \\ [] ) do
-        __MODULE__ |> Ecto.Query.first |> repo.one |> pload( opts )
+        model |> Ecto.Query.first |> repo.one |> pload( opts )
       end
 
 
@@ -259,7 +265,7 @@ defmodule EctoShortcuts do
           end
         end
 
-        ecto_query = ecto_query || __MODULE__
+        ecto_query = ecto_query || model
         ecto_query
         |> Ecto.Query.where(^attributes)
         |> repo.all
@@ -268,17 +274,17 @@ defmodule EctoShortcuts do
 
       # silly method needed due to macro hell
       defp limit_where(limit) do
-        Ecto.Query.from(__MODULE__, [limit: ^limit])
+        Ecto.Query.from(model, [limit: ^limit])
       end
 
       # silly method needed due to macro hell
       defp order_by_where(order_by) do
-        Ecto.Query.from(__MODULE__, [order_by: ^order_by])
+        Ecto.Query.from(model, [order_by: ^order_by])
       end
 
       # silly method needed due to macro hell
       defp limit_order_by_where(limit, order_by) do
-        Ecto.Query.from(__MODULE__, [limit: ^limit, order_by: ^order_by])
+        Ecto.Query.from(model, [limit: ^limit, order_by: ^order_by])
       end
 
       @doc """
@@ -290,7 +296,7 @@ defmodule EctoShortcuts do
 
       """
       def first_where(attributes) do
-        __MODULE__
+        model
         |> Ecto.Query.where(^attributes)
         |> Ecto.Query.first
         |> repo.one
@@ -341,7 +347,7 @@ defmodule EctoShortcuts do
 
       """
       def all(opts \\ []) do
-        __MODULE__ |> repo.all |> pload(opts)
+        model |> repo.all |> pload(opts)
       end
 
       @doc """
@@ -353,7 +359,7 @@ defmodule EctoShortcuts do
 
       """
       def count do
-        repo.one(Ecto.Query.from p in __MODULE__, select: count("id"))
+        repo.one(Ecto.Query.from p in model, select: count("id"))
       end
 
 
@@ -366,7 +372,7 @@ defmodule EctoShortcuts do
 
       """
       def count_where(filters) do
-        Ecto.Query.from(p in __MODULE__, select: count("id"))
+        Ecto.Query.from(p in model, select: count("id"))
         |> Ecto.Query.where(^filters)
         |> repo.one
       end

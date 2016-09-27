@@ -3,7 +3,7 @@ defmodule EctoShortcuts.Mixfile do
 
   def project do
     [app: :ecto_shortcuts,
-     version: "0.1.3",
+     version: "0.1.4",
      elixir: "~> 1.3",
      elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,

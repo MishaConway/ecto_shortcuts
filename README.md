@@ -18,7 +18,7 @@ This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and ca
 
 ## Configuration   
 
-Use it in your Ecto Models
+Use it in your Ecto Models.
 
 ```elixir
 defmodule MyApp.User do
@@ -27,6 +27,27 @@ defmodule MyApp.User do
   ...
 end  
 ```
+
+The approach above is the original pattern adopted by this library, but moving forward it is recommended to
+use the following approach that more closely mirrors the new Phoenix model standards in that you can decouple shortcuts
+from your model by using in a separate module. The benefit of this approach is you don't couple repositories directly to schemas
+and you can even create shortcuts for the same schema across multiple repos.
+
+```elixir
+defmodule MyApp.RepoAUsers do
+  ...
+  use EctoShortcuts, repo: MyApp.RepoA, model: MyApp.User
+  ...
+end
+
+defmodule MyApp.RepoBUsers do
+  ...
+  use EctoShortcuts, repo: MyApp.RepoB, model: MyApp.User
+  ...
+end  
+```
+
+
 
 ## Usage
 
