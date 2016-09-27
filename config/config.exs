@@ -2,6 +2,17 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :ecto_shortcuts,
+  ecto_repos: [EctoShortcutsTest.Repo]
+
+config :ecto_shortcuts, EctoShortcutsTest.Repo,
+  adapter: Ecto.Adapters.MySQL,
+  database: "ecto_shortcuts_test",
+  username: "root",
+  password: "root",
+  host: "localhost",
+  port: "3306"
+
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
