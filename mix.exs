@@ -3,8 +3,9 @@ defmodule EctoShortcuts.Mixfile do
 
   def project do
     [app: :ecto_shortcuts,
-     version: "0.1.2",
+     version: "0.1.3",
      elixir: "~> 1.3",
+     elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
@@ -20,7 +21,10 @@ defmodule EctoShortcuts.Mixfile do
     links: %{github: "https://github.com/MishaConway/ecto_shortcuts"},
     maintainers: ["Misha Conway"],
     files: ~w(mix.exs README.md CHANGELOG.md lib)]
- end
+  end
+
+  defp elixirc_paths(:test), do: ["lib", "test/lib", "test/migrations"]
+  defp elixirc_paths(_),     do: ["lib"]
 
   # Configuration for the OTP application
   #
@@ -40,6 +44,7 @@ defmodule EctoShortcuts.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:ecto, ">= 2.0.4"},
-    {:ex_doc, ">= 0.0.0", only: :dev}]
+    {:ex_doc, ">= 0.0.0", only: :dev},
+    {:mariaex, ">= 0.0.0", only: :test}]
   end
 end

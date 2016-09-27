@@ -12,7 +12,7 @@ This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and ca
 
   ```elixir
   def deps do
-    [{:ecto_shortcuts, "~> 0.1.2"}]
+    [{:ecto_shortcuts, "~> 0.1.3"}]
   end
   ```
 
@@ -161,12 +161,22 @@ count_where
 	MyApp.User.count_where status_id: 4
 ```
 
+## Running Tests
 
+To run tests, you will need to have mysql running. Create a database you want tests to run on and then
+configure /config.exs.
+
+By default, it assumes a database called ecto_shortcuts_test with username root and password root
+running on localhost on the default mysql port 3306.
+
+Once you have set this up, you can now start testing!
+
+```elixir
+  mix test
+```
 
 
 ### Coming Soon:
-
+ * ability to place this code in modules separate from your models to support new Phoenix guidelines
  * support for greater and less than comparisons
  * support for basic joins
- * more documentation
- * tests

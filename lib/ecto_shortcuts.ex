@@ -19,6 +19,10 @@ defmodule EctoShortcuts do
     end
 
     quote do
+      import Ecto
+      import Ecto.Changeset
+      import Ecto.Query
+
       def repo do
         unquote repo
       end
