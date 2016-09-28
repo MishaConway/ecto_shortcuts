@@ -160,7 +160,7 @@ end
 
 **get\_or\_insert**
 ```elixir
-  # get user with name John Smith or insert user does not exist
+  # get user with name John Smith or insert if user does not exist
   MyApp.User.get_or_insert first_name: "John", last_name: "Smith"
 
   MyApp.User.get_or_insert %{first_name: "John", last_name: "Smith"}
@@ -231,7 +231,7 @@ defmodule MyApp.Users do
 end
 ```
 or using wildcards
-```
+```elixir
 defmodule MyApp.Users do
   ...
   use EctoShortcuts, repo: MyApp.Repo,
@@ -247,10 +247,10 @@ If you want to override defaults, pass in specific preloads.
 ## Running Tests
 
 To run tests:
- 
+
 - `mysql` must be running, then
 - create a database you want tests to run on &
-- configure `/config.exs`. This creates database called `ecto\_shortcuts\_test` with the username `root` and password `root`.  The default is `mysql port 3306`.
+- configure `/config.exs`. This creates database called `ecto_shortcuts_test` with the username `root` and password `root`.  The default is `mysql port 3306`.
 
 - Run your test. `mix test`
 
