@@ -13,6 +13,28 @@ defmodule Decoupled.GetTest do
     assert MyApp.UserStatus == user.user_status.__struct__
   end
 
+  test "get user 4 has name Turing and preloads user_status via wildcard" do
+    user = MyApp.Users.get 4, preload: "*"
+    assert "Turing" == user.name
+    assert MyApp.UserStatus == user.user_status.__struct__
+
+    user = MyApp.Users.get 4, preload: :*
+    assert "Turing" == user.name
+    assert MyApp.UserStatus == user.user_status.__struct__
+  end
+
+  test "get user 4 has name Turing and preloads user status va default preload" do
+    user = MyApp.UsersWithDefaultPreloads.get 4
+    assert "Turing" == user.name
+    assert MyApp.UserStatus == user.user_status.__struct__
+  end
+
+  test "get user 4 has name Turing and does not preload user status via default preload when overridden with empty preload" do
+    user = MyApp.UsersWithDefaultPreloads.get 4, preload: []
+    assert "Turing" == user.name
+    assert MyApp.UserStatus != user.user_status.__struct__
+  end
+
   test "get! user 9 has name Ernest" do
     user = MyApp.Users.get 9
     assert "Ernest" == user.name

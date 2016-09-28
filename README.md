@@ -1,4 +1,4 @@
-# EctoShortcuts
+# :bullettrain_front: EctoShortcuts
 
 Lightweight extension to simplify common use cases in Ecto.
 
@@ -12,7 +12,7 @@ This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and ca
 
   ```elixir
   def deps do
-    [{:ecto_shortcuts, "~> 0.1.4"}]
+    [{:ecto_shortcuts, "~> 0.1.5"}]
   end
   ```
 
@@ -181,6 +181,52 @@ count_where
 	# get count of all users where status is 4
 	MyApp.User.count_where status_id: 4
 ```
+
+## Wilcard Preloads
+
+You can preload all associations via a wildcard. Instead of doing
+
+```elixir
+  MyApp.User.get 3, preload: [:friends, :user_status, :posts]
+```
+
+You can simply do
+
+```elixir
+  MyApp.User.get 3, preload: "*"
+```
+
+or
+
+```elixir
+  MyApp.User.get 3, preload: :*
+```
+
+## Default Preloads
+
+If you commonly have to preload the same associations, you can set a default set of preloads.
+
+```elixir
+defmodule MyApp.RepoBUsers do
+  ...
+  use EctoShortcuts, repo: MyApp.Repo, model: MyApp.User, default_preload: [:friends, :user_status, :posts]
+  ...
+end
+
+or using wildcards
+
+defmodule MyApp.RepoBUsers do
+  ...
+  use EctoShortcuts, repo: MyApp.Repo, model: MyApp.User, default_preload: "*"
+  ...
+end
+```
+
+Now in any calls to shortcuts that take preloads, your queries will automatically preload
+the associations you specified without you needing to explicitly set the preload options.
+
+If you want to override the defaults, you can of course pass in the specific preloads you want.
+
 
 ## Running Tests
 

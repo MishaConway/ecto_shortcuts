@@ -19,6 +19,7 @@ defmodule EctoShortcuts do
     end
 
     model = Keyword.get opts, :model
+    default_preload = Keyword.get opts, :default_preload
 
     quote do
       import Ecto
@@ -33,12 +34,28 @@ defmodule EctoShortcuts do
         unquote(model) || __MODULE__
       end
 
+      def default_preload do
+        unquote(default_preload)
+      end
+
+
+      ######### PRELOADING ##########
+
       defp pload( preloadable, opts ) do
-        preloads = opts[:preload] || opts[:preloads] || []
+        preloads = normalize_pload_list( opts[:preload] || opts[:preloads] || default_preload || [] )
+
         if Enum.count(preloads) > 0 do
           preloadable |> repo.preload(preloads)
         else
           preloadable
+        end
+      end
+
+      defp normalize_pload_list( pload_list ) do
+        case pload_list do
+          :* -> model.__schema__(:associations)
+          "*" -> model.__schema__(:associations)
+          _ -> pload_list
         end
       end
 
