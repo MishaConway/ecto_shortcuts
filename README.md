@@ -12,7 +12,7 @@ This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and ca
 
   ```elixir
   def deps do
-    [{:ecto_shortcuts, "~> 0.1.5"}]
+    [{:ecto_shortcuts, "~> 0.1.6"}]
   end
   ```
 

@@ -51,6 +51,11 @@ defmodule Decoupled.GetTest do
     assert "Trump" == user.name
   end
 
+  test "get_by Trump has name Trump using map" do
+    user = MyApp.Users.get_by %{name: "Trump"}
+    assert "Trump" == user.name
+  end
+
   test "get_by Trump has name Trump and preloads user status" do
     user = MyApp.Users.get_by [name: "Trump"], preload: [:user_status]
     assert "Trump" == user.name
@@ -59,6 +64,11 @@ defmodule Decoupled.GetTest do
 
   test "get_by! Hillary has name Hillary" do
     user = MyApp.Users.get_by! name: "Hillary"
+    assert "Hillary" == user.name
+  end
+
+  test "get_by! Hillary has name Hillary using map" do
+    user = MyApp.Users.get_by! %{name: "Hillary"}
     assert "Hillary" == user.name
   end
 

@@ -38,6 +38,14 @@ defmodule EctoShortcuts do
         unquote(default_preload)
       end
 
+      defp normalize_attributes( attributes ) do
+        if is_map attributes do
+          Map.to_list attributes
+        else
+          attributes
+        end
+      end
+
 
       ######### PRELOADING ##########
 
@@ -131,7 +139,7 @@ defmodule EctoShortcuts do
 
       """
       def update_by(filters, updates, opts \\ []) do
-        reduce_filters(filters) |> repo.update_all(updates, opts)
+        reduce_filters(filters) |> repo.update_all(normalize_attributes(updates), opts)
       end
 
 
@@ -149,7 +157,7 @@ defmodule EctoShortcuts do
       def update_by_returning(filters, updates, opts \\ []) do
         {num_rows, result} = update_by filters, updates, opts
         if num_rows > 0 do
-          where(filters) |> pload(opts)
+          where(normalize_attributes(filters)) |> pload(opts)
         else
           []
         end
@@ -272,6 +280,7 @@ defmodule EctoShortcuts do
 
       """
       def where(attributes, options \\ []) do
+        options = normalize_attributes options
         ecto_query =  if options[:limit] && options[:order_by] do
           limit_order_by_where options[:limit], options[:order_by]
         else
@@ -288,7 +297,7 @@ defmodule EctoShortcuts do
 
         ecto_query = ecto_query || model
         ecto_query
-        |> Ecto.Query.where(^attributes)
+        |> Ecto.Query.where(^normalize_attributes(attributes))
         |> repo.all
         |> pload(options)
       end
@@ -318,7 +327,7 @@ defmodule EctoShortcuts do
       """
       def first_where(attributes) do
         model
-        |> Ecto.Query.where(^attributes)
+        |> Ecto.Query.where(^normalize_attributes(attributes))
         |> Ecto.Query.first
         |> repo.one
       end
@@ -394,7 +403,7 @@ defmodule EctoShortcuts do
       """
       def count_where(filters) do
         Ecto.Query.from(p in model, select: count("id"))
-        |> Ecto.Query.where(^filters)
+        |> Ecto.Query.where(^normalize_attributes(filters))
         |> repo.one
       end
     end

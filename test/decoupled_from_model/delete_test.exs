@@ -19,4 +19,10 @@ defmodule Decoupled.DeleteTest do
     MyApp.Users.delete_by user_status_id: 3
     assert 0 == MyApp.Users.count_where user_status_id: 3
   end
+
+  test "delete_by deletes all users with status 3 using map" do
+    assert 0 < MyApp.Users.count_where user_status_id: 3
+    MyApp.Users.delete_by %{user_status_id: 3}
+    assert 0 == MyApp.Users.count_where user_status_id: 3
+  end
 end

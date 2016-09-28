@@ -8,8 +8,20 @@ defmodule Decoupled.InsertTest do
     assert 4 == user.user_status_id
   end
 
+  test "users can be inserted with a map" do
+    {:ok, user} = MyApp.Users.insert %{name: "coolio", user_status_id: 4}
+    assert "coolio" == user.name
+    assert 4 == user.user_status_id
+  end
+
   test "users can be inserted!" do
     user = MyApp.Users.insert! name: "amelia", user_status_id: 5
+    assert "amelia" == user.name
+    assert 5 == user.user_status_id
+  end
+
+  test "users can be inserted! with a map" do
+    user = MyApp.Users.insert! %{name: "amelia", user_status_id: 5}
     assert "amelia" == user.name
     assert 5 == user.user_status_id
   end
