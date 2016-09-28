@@ -1,14 +1,12 @@
-# :bullettrain_front: EctoShortcuts
+# EctoShortcuts 🚅
 
-Lightweight extension to simplify common use cases in Ecto.
-
-What this is not is a comprehensive replacement. Ecto's DSL is rich and flexible and should be deferred to for anything complex.
+> Lightweight Elixir extension to simplify common use cases in Ecto.
 
 ## Installation
 
-This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and can be installed as:
+1. Get [Hex](https://hex.pm/packages/ecto_shortcuts)
 
-  Add `ecto_shortcuts` to your list of dependencies in `mix.exs`:
+2. Add `ecto_shortcuts` to your list of dependencies in `mix.exs`:
 
   ```elixir
   def deps do
@@ -18,7 +16,7 @@ This code is available in Hex at (https://hex.pm/packages/ecto_shortcuts) and ca
 
 ## Configuration   
 
-Use it in your Ecto Models.
+In your Ecto Models:
 
 ```elixir
 defmodule MyApp.User do
@@ -27,11 +25,7 @@ defmodule MyApp.User do
   ...
 end  
 ```
-
-The approach above is the original pattern adopted by this library, but moving forward it is recommended to
-use the following approach that more closely mirrors the new Phoenix model standards in that you can decouple shortcuts
-from your model by using in a separate module. The benefit of this approach is you don't couple repositories directly to schemas
-and you can even create shortcuts for the same schema across multiple repos.
+or, use the following approach that more closely mirrors the Phoenix model standards: 
 
 ```elixir
 defmodule MyApp.RepoAUsers do
@@ -47,13 +41,10 @@ defmodule MyApp.RepoBUsers do
 end  
 ```
 
-
-
 ## Usage
-<b>insert/insert notes:</b>
-<br><small>If your model defines a changeset, insert and insert! will by default use it alongside any validations in your changeset. To disable validation, use the validate: false option shown below. If your model lacks a changeset, then your model will be inserted without any validation.</small>
 
-insert
+
+**insert**
 ```elixir
 	# create a new user named Bob
 	MyApp.User.insert name: "Bob"
@@ -64,7 +55,7 @@ insert
   MyApp.User.insert %{name: "Alice"}, %{validate: false}
 ```
 
-insert!
+**insert!**
 ```elixir
 	MyApp.User.insert! name: "Bob"
   MyApp.User.insert! %{name: "Bob"}
@@ -73,21 +64,25 @@ insert!
   MyApp.User.insert! %{name: "Alice"}, %{validate: false}
 ```
 
-update_all
+**note:** If your model defines a changeset, `insert`, `insert!` & any validations  will by default use that changeset. To disable validation, use the validate: false option shown below. If your model lacks a changeset, then your model will be inserted without any validation.
+
+--
+
+**update_all**
 ```elixir
 	# set status_id to 3 on all users
 	MyApp.User.update_all set: [status_id: 3]
   MyApp.User.update_all %{set: [status_id: 3]}
 ```
 
-update_by
+**update_by**
 ```elixir
 	# set status_id to 4 where mode is 3
 	MyApp.User.update_by [mode: 3], set: [status_id: 4]
   MyApp.User.update_by %{mode: 3}, %{set: [status_id: 4]}
 ```
 
-update_by_returning
+**update\_by\_returning**
 ```elixir
 	# set status_id to 4 where mode is 3
 	updated_users = MyApp.User.update_by_returning [mode: 3], set: [status_id: 4]
@@ -99,20 +94,20 @@ update_by_returning
   [updated_user] = MyApp.User.update_by_returning %{id: 1}, %{set: [status_id: 3]}, preload: [:posts]
 ```
 
-delete_all
+**delete_all**
 ```elixir
 	# delete all users
 	MyApp.User.delete_all
 ```
 
-delete_by
+**delete_by**
 ```elixir
 	# delete all users where mode is 3
 	MyApp.User.delete_by mode: 3
   MyApp.User.delete_by %{mode: 3}
 ```
 
-get
+**get**
 ```elixir
 	# get user with id 3
 	MyApp.User.get 3
@@ -124,14 +119,14 @@ get
   MyApp.User.get 3, preload: [{:posts, :post_type}]
 ```
 
-get!
+**get!**
 ```elixir
 	MyApp.User.get! 3
   MyApp.User.get! 3, preload: [:posts]
   MyApp.User.get! 3, preload: [{:posts, :post_type}]
 ```
 
-get_by
+**get_by**
 ```elixir
 	# fetch a single user where name is Sally and age is 30
 	MyApp.User.get_by name: "Sally", age: 30
@@ -143,13 +138,13 @@ get_by
   MyApp.User.get_by %{name: "Sally"},  preload: [:posts]
 ```
 
-get_by!
+**get_by!**
 ```elixir
 	MyApp.User.get_by! name: "Sally", age: 30
   MyApp.User.get_by! [name: "Sally", age: 30],  preload: [:posts]
 ```
 
-where
+**where**
 ```elixir
 	# get all users where status is 3
 	MyApp.User.where status: 3
@@ -164,7 +159,7 @@ where
   MyApp.User.where [status: 3],  limit: 10, order_by: [desc: :inserted_at], preload: [:posts]
 ```
 
-get_or_insert
+**get\_or\_insert**
 ```elixir
 	# get user with name John Smith or insert user does not exist
 	MyApp.User.get_or_insert first_name: "John", last_name: "Smith"
@@ -172,12 +167,12 @@ get_or_insert
   MyApp.User.get_or_insert %{first_name: "John", last_name: "Smith"}
 ```
 
-get_or_insert!
+**get\_or\_insert!**
 ```elixir
 	MyApp.User.get_or_insert! first_name: "John", last_name: "Smith"
 ```
 
-first
+**first**
 ```elixir
   # get first user
   MyApp.User.first
@@ -186,7 +181,7 @@ first
   MyApp.User.first preload: [:posts]
 ```
 
-all
+**all**
 ```elixir
 	# get all users
 	MyApp.User.all
@@ -195,13 +190,13 @@ all
   MyApp.User.all preload: [:posts]
 ```
 
-count
+**count**
 ```elixir
 	# get count of all users
 	MyApp.User.count
 ```
 
-count_where
+**count_where**
 ```elixir
 	# get count of all users where status is 4
 	MyApp.User.count_where status_id: 4
@@ -211,13 +206,7 @@ count_where
 
 ## Wilcard Preloads
 
-You can preload all associations via a wildcard. Instead of doing
-
-```elixir
-  MyApp.User.get 3, preload: [:friends, :user_status, :posts]
-```
-
-You can simply do
+You can preload all associations via a wildcard, do
 
 ```elixir
   MyApp.User.get 3, preload: "*"
@@ -231,7 +220,7 @@ or
 
 ## Default Preloads
 
-If you commonly have to preload the same associations, you can set a default set of preloads.
+You can set a default set of preloads.
 
 ```elixir
 defmodule MyApp.Users do
@@ -253,27 +242,30 @@ defmodule MyApp.Users do
 end
 ```
 
-Now in any calls to shortcuts that take preloads, your queries will automatically preload
-the associations you specified without you needing to explicitly set the preload options.
+Now in any calls to shortcuts that take preloads, your queries will preload
+the associations you specified without you needing to explicitly set preload options.
 
-If you want to override the defaults, you can of course pass in the specific preloads you want.
+If you want to override defaults, you can pass in specific preloads you want.
 
 
 ## Running Tests
 
-To run tests, you will need to have mysql running. Create a database you want tests to run on and then
-configure /config.exs.
+To run tests:
+ 
+1. you will need `mysql` running, then
+2. create a database you want tests to run on &
+3. configure /config.exs.
 
-By default, it assumes a database called ecto_shortcuts_test with username root and password root
-running on localhost on the default mysql port 3306.
+By default, this creates database called `ecto\_shortcuts\_test` with the username `root` and password `root`.  default mysql port 3306.
 
-Once you have set this up, you can now start testing!
+Start testing!
 
 ```elixir
   mix test
 ```
 
-
 ### Coming Soon:
- * support for greater and less than comparisons
+ * support for greater & less than comparisons
  * support for basic joins
+ 
+NOTE: Ecto's DSL is rich & flexible. It should be deferred to for anything complex. 🙌
