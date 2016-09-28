@@ -9,7 +9,7 @@ defmodule EctoShortcutsTest.InitialMigration do
 
     create table(:users) do
       add :name, :string, null: false
-      add :user_status_id, :integer, null: false
+      add :user_status_id, :integer, null: false, default: 0
       timestamps
     end
   end

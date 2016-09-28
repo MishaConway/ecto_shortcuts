@@ -50,18 +50,27 @@ end
 
 
 ## Usage
+<b>insert/insert notes:</b>
+<br><small>If your model defines a changeset, insert and insert! will by default use it alongside any validations in your changeset. To disable validation, use the validate: false option shown below. If your model lacks a changeset, then your model will be inserted without any validation.</small>
 
 insert
 ```elixir
 	# create a new user named Bob
 	MyApp.User.insert name: "Bob"
   MyApp.User.insert %{name: "Bob"}
+
+  # create a new user named Alice without validation
+	MyApp.User.insert name: "Alice", validate: false
+  MyApp.User.insert %{name: "Alice"}, %{validate: false}
 ```
 
 insert!
 ```elixir
 	MyApp.User.insert! name: "Bob"
   MyApp.User.insert! %{name: "Bob"}
+
+  MyApp.User.insert! name: "Alice", validate: false
+  MyApp.User.insert! %{name: "Alice"}, %{validate: false}
 ```
 
 update_all

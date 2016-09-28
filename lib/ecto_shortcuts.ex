@@ -69,8 +69,10 @@ defmodule EctoShortcuts do
 
       ######### INSERTS ##########
 
-      defp new_changeset(attributes) do
-        if model.module_info(:exports)[:changeset] do
+      defp new_changeset(attributes, opts ) do
+        disable_validation = false == (opts || [])[:validate]
+
+        if !disable_validation && model.module_info(:exports)[:changeset] do
           model.changeset struct(model), attributes
         else
           struct(model, attributes)
@@ -87,8 +89,8 @@ defmodule EctoShortcuts do
           iex> MyApp.User.insert name: "bob"
 
       """
-      def insert(attributes) do
-        repo.insert new_changeset(Enum.into(attributes, %{}))
+      def insert(attributes, opts \\ []) do
+        repo.insert new_changeset(Enum.into(attributes, %{}), opts)
       end
 
       @doc """
@@ -100,8 +102,8 @@ defmodule EctoShortcuts do
           iex> MyApp.User.insert! name: "bob"
 
       """
-      def insert!(attributes) do
-        repo.insert! new_changeset(Enum.into(attributes, %{}))
+      def insert!(attributes, opts \\ []) do
+        repo.insert! new_changeset(Enum.into(attributes, %{}), opts)
       end
 
       ######### UPDATES ##########
