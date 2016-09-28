@@ -13,4 +13,16 @@ defmodule InsertTest do
     assert "amelia" == user.name
     assert 5 == user.user_status_id
   end
+
+  test "users without changesets can be inserted" do
+    {:ok, user} = MyApp.UserWithoutChangeset.insert name: "bart", user_status_id: 4
+    assert "bart" == user.name
+    assert 4 == user.user_status_id
+  end
+
+  test "users without changesets can be inserted!" do
+    user = MyApp.UserWithoutChangeset.insert! name: "lorde", user_status_id: 4
+    assert "lorde" == user.name
+    assert 4 == user.user_status_id
+  end
 end

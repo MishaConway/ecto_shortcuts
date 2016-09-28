@@ -62,7 +62,11 @@ defmodule EctoShortcuts do
       ######### INSERTS ##########
 
       defp new_changeset(attributes) do
-        model.changeset struct(model), attributes
+        if model.module_info(:exports)[:changeset] do
+          model.changeset struct(model), attributes
+        else
+          struct(model, attributes)
+        end
       end
 
       @doc """
