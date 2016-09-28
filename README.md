@@ -248,6 +248,5 @@ Once you have set this up, you can now start testing!
 
 
 ### Coming Soon:
- * ability to place this code in modules separate from your models to support new Phoenix guidelines
  * support for greater and less than comparisons
  * support for basic joins
