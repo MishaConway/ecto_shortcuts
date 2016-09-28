@@ -207,17 +207,21 @@ or
 If you commonly have to preload the same associations, you can set a default set of preloads.
 
 ```elixir
-defmodule MyApp.RepoBUsers do
+defmodule MyApp.Users do
   ...
-  use EctoShortcuts, repo: MyApp.Repo, model: MyApp.User, default_preload: [:friends, :user_status, :posts]
+  use EctoShortcuts, repo: MyApp.Repo,
+                     model: MyApp.User,
+                     default_preload: [:friends, :user_status, :posts]
   ...
 end
 
 or using wildcards
 
-defmodule MyApp.RepoBUsers do
+defmodule MyApp.Users do
   ...
-  use EctoShortcuts, repo: MyApp.Repo, model: MyApp.User, default_preload: "*"
+  use EctoShortcuts, repo: MyApp.Repo,
+                     model: MyApp.User,
+                     default_preload: "*"
   ...
 end
 ```
